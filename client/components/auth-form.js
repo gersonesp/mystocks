@@ -35,6 +35,10 @@ const AuthForm = props => {
                 <small>Password</small>
               </label>
               <input name="password" type="password" />
+
+              <div>
+                <button type="submit">{displayName}</button>
+              </div>
             </div>
           ) : (
             <div>
@@ -48,11 +52,12 @@ const AuthForm = props => {
                 <small>Password</small>
               </label>
               <input name="password" type="password" />
+
+              <div>
+                <button type="submit">{displayName}</button>
+              </div>
             </div>
           )}
-        </div>
-        <div>
-          <button type="submit">{displayName}</button>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
