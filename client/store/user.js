@@ -6,6 +6,7 @@ import history from '../history'
  */
 const GET_USER = 'GET_USER'
 const REMOVE_USER = 'REMOVE_USER'
+export const GET_PORTFOLIO = 'GET_PORTFOLIO'
 
 /**
  * INITIAL STATE
@@ -17,10 +18,17 @@ const defaultUser = {}
  */
 const getUser = user => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
+const getPortfolio = portfolio => ({type: GET_PORTFOLIO, portfolio})
 
 /**
  * THUNK CREATORS
  */
+export const portfolio = id => dispatch => {
+  fetch(`/api/users/${id}/portfolio`)
+    .then(res => res.json())
+    .then(data => dispatch(getPortfolio(data)))
+}
+
 export const me = () => async dispatch => {
   try {
     const res = await axios.get('/auth/me')
@@ -74,6 +82,10 @@ export const logout = () => async dispatch => {
  */
 export default function(state = defaultUser, action) {
   switch (action.type) {
+    case GET_PORTFOLIO:
+      return {
+        portfolio: action.portfolio
+      }
     case GET_USER:
       return action.user
     case REMOVE_USER:

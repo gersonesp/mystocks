@@ -5,8 +5,25 @@ import {composeWithDevTools} from 'redux-devtools-extension'
 import {reducer as formReducer} from 'redux-form'
 import user from './user'
 import stocks from './stocks'
+// import GET_STOCKS for redux-form, needs to be seperated from stocks import to avoid redux error
+import {GET_STOCKS} from './stocks'
 
-const reducer = combineReducers({user, stocks, form: formReducer})
+const reducers = {
+  user,
+  stocks,
+  form: formReducer.plugin({
+    TickerForm: (state, action) => {
+      switch (action.type) {
+        case GET_STOCKS:
+          return undefined // <--- Clear form data
+        default:
+          return state
+      }
+    }
+  })
+}
+
+const reducer = combineReducers(reducers)
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )

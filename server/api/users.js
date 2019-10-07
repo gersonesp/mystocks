@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User} = require('../db/models')
+const {User, Stock, Transaction} = require('../db/models')
 module.exports = router
 
 router.get('/', async (req, res, next) => {
@@ -13,16 +13,30 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:id/:ticker/:quantity', async (req, res, next) => {
+router.get('/:id/:ticker/:quantity', (req, res, next) => {
   let {id, ticker, quantity} = req.params
-  const user = await User.findByPk(id)
-  user.update({
-    stocks: {[ticker]: quantity}
+  Stock.findOrCreate({
+    where: {
+      ticker,
+      userId: id
+    },
+    defaults: {ticker, quantity}
   })
+    .then(([stock, created]) => {
+      return stock.increment('quantity', {by: quantity})
+    })
+    .then(stock => {
+      res.json(stock)
+    })
+})
 
-  const field = Object.keys(user.stocks)[0]
-
-  user
-    .save({fields: [user.stocks[field]]})
-    .then(data => console.log(data.stocks))
+router.get('/:id/portfolio', (req, res, next) => {
+  let {id} = req.params
+  Stock.findAll({
+    where: {
+      userId: id
+    }
+  }).then(portfolio => {
+    res.json(portfolio)
+  })
 })

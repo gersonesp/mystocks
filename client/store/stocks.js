@@ -1,6 +1,5 @@
 // ACTION TYPES
-
-const GET_STOCKS = 'GET_STOCKS'
+export const GET_STOCKS = 'GET_STOCKS'
 
 // INITIAL STATE
 
@@ -17,7 +16,7 @@ export const stock = (ticker, quantity, id) => dispatch => {
 
   fetch(`/api/users/${id}/${ticker}/${quantity}`)
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data => console.log('Data added to Portfolio', data))
 }
 
 // REDUCER
@@ -29,7 +28,7 @@ export default function(state = defaultStocks, action) {
         price:
           action.stocks['Time Series (5min)'][
             Object.keys(action.stocks['Time Series (5min)'])[0]
-          ]['1. open']
+          ]['4. close']
       }
     default:
       return state
