@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {stock} from '../store'
+import {stock, addPurchase} from '../store'
 import TickerForm from './ticker-form'
 
 /**
@@ -9,6 +9,7 @@ import TickerForm from './ticker-form'
  */
 export const UserHome = props => {
   const {
+    id,
     firstName,
     lastName,
     balance,
@@ -25,7 +26,7 @@ export const UserHome = props => {
 
       <div>Cash: {balance}</div>
 
-      <TickerForm onSubmit={values => handleSearchSubmit(values)} />
+      <TickerForm onSubmit={values => handleSearchSubmit(values, id)} />
 
       {error && error.response && <div> {error.response.data} </div>}
     </div>
@@ -34,7 +35,8 @@ export const UserHome = props => {
 
 const mapDispatchStocks = dispatch => {
   return {
-    handleSearchSubmit: value => dispatch(stock(value.ticker))
+    handleSearchSubmit: (value, id) =>
+      dispatch(stock(value.ticker, value.quantity, id))
   }
 }
 
@@ -43,6 +45,7 @@ const mapDispatchStocks = dispatch => {
  */
 const mapState = state => {
   return {
+    id: state.user.id,
     firstName: state.user.firstName,
     lastName: state.user.lastName,
     email: state.user.email,

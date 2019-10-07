@@ -10,10 +10,14 @@ const defaultStocks = {}
 const getStocks = stocks => ({type: GET_STOCKS, stocks})
 
 // THUNK CREATOR
-export const stock = ticker => dispatch => {
+export const stock = (ticker, quantity, id) => dispatch => {
   fetch(`/api/stocks?ticker=${ticker}`)
     .then(res => res.json())
     .then(data => dispatch(getStocks(data)))
+
+  fetch(`/api/users/${id}/${ticker}/${quantity}`)
+    .then(res => res.json())
+    .then(data => console.log(data))
 }
 
 // REDUCER

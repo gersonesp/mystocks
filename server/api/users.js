@@ -12,3 +12,17 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+router.get('/:id/:ticker/:quantity', async (req, res, next) => {
+  let {id, ticker, quantity} = req.params
+  const user = await User.findByPk(id)
+  user.update({
+    stocks: {[ticker]: quantity}
+  })
+
+  const field = Object.keys(user.stocks)[0]
+
+  user
+    .save({fields: [user.stocks[field]]})
+    .then(data => console.log(data.stocks))
+})
