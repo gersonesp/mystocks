@@ -6,6 +6,7 @@ import {reducer as formReducer} from 'redux-form'
 import user from './user'
 import stocks from './stocks'
 import portfolio from './portfolio'
+import transactions from './transactions'
 // import GET_STOCKS for redux-form, needs to be seperated from stocks import to avoid redux error
 import {GET_STOCKS} from './stocks'
 
@@ -13,6 +14,7 @@ const reducers = {
   user,
   stocks,
   portfolio,
+  transactions,
   form: formReducer.plugin({
     TickerForm: (state, action) => {
       switch (action.type) {
@@ -35,3 +37,4 @@ export default store
 export * from './user'
 export * from './stocks'
 export * from './portfolio'
+export * from './transactions'

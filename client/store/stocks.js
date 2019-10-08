@@ -12,14 +12,22 @@ const getCurrentPrice = stock => ({type: GET_CURRENT_PRICE, stock})
 
 // THUNK CREATOR
 export const stock = (ticker, quantity, id) => dispatch => {
+  // make call to alpha advantage api and retreive stock data
   fetch(`/api/stocks?ticker=${ticker}`)
     .then(res => res.json())
     .then(data => dispatch(getStocks(data)))
     .catch(error => console.log(error))
 
+  //add portfolio data to db
   fetch(`/api/users/${id}/${ticker}/${quantity}`)
     .then(res => res.json())
     .then(data => console.log('Data added to Portfolio', data))
+    .catch(error => console.log(error))
+
+  //add transactions to db
+  fetch(`/api/users/${id}/${ticker}/${quantity}/addTransaction`)
+    .then(res => res.json())
+    .then(data => console.log('Data added to Transactions', data))
     .catch(error => console.log(error))
 }
 

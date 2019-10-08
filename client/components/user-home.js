@@ -28,11 +28,11 @@ export const UserHome = props => {
         Welcome, {user.firstName} {user.lastName}!
       </h3>
 
-      <div>Cash: {user.balance}</div>
+      <div>Cash: ${user.balance}</div>
 
       <TickerForm
         onSubmit={values => {
-          handleSearchSubmit(values, user.id)
+          handleSearchSubmit(values, user.id, stocks.close)
         }}
       />
 
