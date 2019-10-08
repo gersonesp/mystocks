@@ -1,6 +1,6 @@
 const GET_PORTFOLIO = 'GET_PORTFOLIO'
 
-const defaultPortfolio = {}
+const defaultPortfolio = []
 
 const getPortfolio = portfolio => ({type: GET_PORTFOLIO, portfolio})
 

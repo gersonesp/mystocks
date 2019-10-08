@@ -21,7 +21,7 @@ router.get('/:id/:ticker/:quantity', (req, res, next) => {
       ticker,
       userId: id
     },
-    defaults: {ticker, quantity}
+    defaults: {ticker, quantity: 0}
   })
     .then(([stock, created]) => {
       return stock.increment('quantity', {by: quantity})
