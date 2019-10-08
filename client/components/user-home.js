@@ -1,61 +1,63 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import {stock} from '../store'
+import {useSelector, useDispatch} from 'react-redux'
+import {stock, currentPrice, portfolio as dispatchPortfolio} from '../store'
 import TickerForm from './ticker-form'
 
 /**
  * COMPONENT
  */
 export const UserHome = props => {
-  const {
-    firstName,
-    lastName,
-    balance,
-    handleSearchSubmit,
-    values,
-    error
-  } = props
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+  const portfolio = useSelector(state => state.portfolio)
+  const stocks = useSelector(state => state.stocks)
+
+  const handleSearchSubmit = (value, id) => {
+    dispatch(stock(value.ticker, value.quantity, id))
+  }
+
+  useEffect(() => {
+    dispatch(dispatchPortfolio(user.id))
+    //TODO had portfolio in array below (second argument for useEffect) to active rerender on change
+  }, [])
 
   return (
     <div>
       <h3>
-        Welcome, {firstName} {lastName}!
+        Welcome, {user.firstName} {user.lastName}!
       </h3>
 
-      <div>Cash: {balance}</div>
+      <div>Cash: {user.balance}</div>
 
-      <TickerForm onSubmit={values => handleSearchSubmit(values)} />
+      <TickerForm
+        onSubmit={values => {
+          handleSearchSubmit(values, user.id)
+        }}
+      />
 
-      {error && error.response && <div> {error.response.data} </div>}
+      <h3>Portfolio</h3>
+
+      {typeof portfolio !== 'undefined' &&
+        portfolio &&
+        portfolio.map(item => (
+          <li key={item.id}>
+            {item.ticker} - {item.quantity} shares @ {}
+          </li>
+        ))}
+
+      {user.error &&
+        user.error.response && <div> {user.error.response.data} </div>}
     </div>
   )
 }
 
-const mapDispatchStocks = dispatch => {
-  return {
-    handleSearchSubmit: value => dispatch(stock(value.ticker))
-  }
-}
-
-/**
- * CONTAINER
- */
-const mapState = state => {
-  return {
-    firstName: state.user.firstName,
-    lastName: state.user.lastName,
-    email: state.user.email,
-    balance: state.user.balance,
-    symbol: state.stocks.symbol
-  }
-}
-
-export default connect(mapState, mapDispatchStocks)(UserHome)
+export default UserHome
 
 /**
  * PROP TYPES
  */
 TickerForm.propTypes = {
+  dispatch: PropTypes.func,
   error: PropTypes.object
 }
