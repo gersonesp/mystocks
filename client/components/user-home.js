@@ -21,6 +21,7 @@ export const UserHome = props => {
 
   useEffect(() => {
     document.getElementsByTagName('h3')[0].style.color = 'red'
+    // TODO
     dispatchPortfolio(id)
   }, [])
 

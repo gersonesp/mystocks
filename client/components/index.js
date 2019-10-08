@@ -5,4 +5,5 @@
  */
 export {default as Navbar} from './navbar'
 export {UserHomeStocks, UserHomePortfolio} from './user-home'
+export {Transactions} from './transactions'
 export {Login, Signup} from './auth-form'
