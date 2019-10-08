@@ -1,7 +1,7 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {stock, portfolio} from '../store'
+import {stock, portfolio as dispatchPortfolio} from '../store'
 import TickerForm from './ticker-form'
 
 /**
@@ -14,9 +14,17 @@ export const UserHome = props => {
     lastName,
     balance,
     handleSearchSubmit,
+    portfolio,
     values,
     error
   } = props
+
+  useEffect(() => {
+    document.getElementsByTagName('h3')[0].style.color = 'red'
+    dispatchPortfolio(id)
+  }, [])
+
+  console.log(portfolio)
 
   return (
     <div>
@@ -32,6 +40,16 @@ export const UserHome = props => {
         }}
       />
 
+      <h3>Portfolio</h3>
+
+      {typeof portfolio !== 'undefined' &&
+        portfolio &&
+        portfolio.map(item => (
+          <li key={item.id}>
+            {item.ticker} - {item.quantity} shares
+          </li>
+        ))}
+
       {error && error.response && <div> {error.response.data} </div>}
     </div>
   )
@@ -41,14 +59,13 @@ const mapDispatchStocks = dispatch => {
   return {
     handleSearchSubmit: (value, id) => {
       dispatch(stock(value.ticker, value.quantity, id))
+      dispatch(dispatchPortfolio(id))
     }
   }
 }
 
-const mapDispatchUser = dispatch => {
-  return {
-    handleSubmit: id => dispatch(portfolio(id))
-  }
+const mapDispatchPortfolio = (dispatch, id) => {
+  return dispatch(dispatchPortfolio(id))
 }
 
 /**
@@ -60,17 +77,26 @@ const mapState = state => {
     firstName: state.user.firstName,
     lastName: state.user.lastName,
     email: state.user.email,
-    balance: state.user.balance,
-    portfolio: state.user.portfolio
+    balance: state.user.balance
+  }
+}
+
+const mapStatePortfolio = state => {
+  return {
+    portfolio: state.portfolio.portfolio
   }
 }
 
 export const UserHomeStocks = connect(mapState, mapDispatchStocks)(UserHome)
-export const UserHomeUsers = connect(mapState, mapDispatchUser)(UserHome)
+export const UserHomePortfolio = connect(
+  mapStatePortfolio,
+  mapDispatchPortfolio
+)(UserHome)
 
 /**
  * PROP TYPES
  */
 TickerForm.propTypes = {
+  dispatch: PropTypes.func,
   error: PropTypes.object
 }

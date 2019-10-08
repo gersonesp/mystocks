@@ -13,6 +13,7 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+// route for storing users owned stocks
 router.get('/:id/:ticker/:quantity', (req, res, next) => {
   let {id, ticker, quantity} = req.params
   Stock.findOrCreate({
@@ -30,6 +31,7 @@ router.get('/:id/:ticker/:quantity', (req, res, next) => {
     })
 })
 
+// route for getting users personal portfolio
 router.get('/:id/portfolio', (req, res, next) => {
   let {id} = req.params
   Stock.findAll({
