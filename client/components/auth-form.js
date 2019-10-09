@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
+import {Link} from 'react-router-dom'
 import {auth} from '../store'
 
 /**
@@ -11,59 +12,84 @@ const AuthForm = props => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
+      <form onSubmit={handleSubmit} name={name} className="authForm">
+        <div className="signupForm">
           {/* If form name is 'sign up' render signup inputs */}
           {name === 'signup' ? (
             <div>
               <label htmlFor="firstName">
-                <small>First Name</small>
+                <p>First Name</p>
               </label>
               <input name="firstName" type="text" />
 
               <label htmlFor="lastName">
-                <small>Last Name</small>
+                <p>Last Name</p>
               </label>
               <input name="lastName" type="text" />
 
               <label htmlFor="email">
-                <small>Email</small>
+                <p>Email</p>
               </label>
               <input name="email" type="text" />
 
               <label htmlFor="password">
-                <small>Password</small>
+                <p>Password</p>
               </label>
               <input name="password" type="password" />
 
-              <div>
-                <button type="submit">{displayName}</button>
+              <button type="submit">{displayName}</button>
+              <div className="loginContainer">
+                Already a member?
+                <Link className="login" to="/login">
+                  Login here.
+                </Link>
               </div>
             </div>
           ) : (
-            <div>
+            <div className="loginForm">
               {/* Else render the login inputs */}
               <label htmlFor="email">
-                <small>Email</small>
+                <p>Email</p>
               </label>
               <input name="email" type="text" />
 
               <label htmlFor="password">
-                <small>Password</small>
+                <p>Password</p>
               </label>
               <input name="password" type="password" />
 
               <div>
-                <button type="submit">{displayName}</button>
+                <div>
+                  <button type="submit">{displayName}</button>
+                </div>
+                <div>
+                  <a className="googleLogin" href="/auth/google">
+                    {displayName} with Google
+                  </a>
+                </div>
+                <div className="signupContainer">
+                  New member?
+                  <Link className="signup" to="/signup">
+                    Sign Up here.
+                  </Link>
+                </div>
               </div>
+              {error &&
+                error.response && (
+                  <div style={{color: 'white'}}> {error.response.data} </div>
+                )}
             </div>
           )}
         </div>
-        {error && error.response && <div> {error.response.data} </div>}
       </form>
-      <a href="/auth/google">{displayName} with Google</a>
     </div>
   )
+}
+
+const mapState = state => {
+  return {
+    isLoggedIn: !!state.user.id
+  }
 }
 
 const mapLogin = state => {
@@ -107,7 +133,7 @@ const mapDispatchLogin = dispatch => {
     }
   }
 }
-
+export const authForm = connect(mapState, null)(AuthForm)
 export const Login = connect(mapLogin, mapDispatchLogin)(AuthForm)
 export const Signup = connect(mapSignup, mapDispatchSignup)(AuthForm)
 

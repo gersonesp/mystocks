@@ -1,5 +1,178 @@
 body {
   font-family: sans-serif;
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  background-color: #050f24;
+}
+
+.navbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbarHeader {
+  margin-top: 2rem;
+  text-align: center;
+  color: white;
+}
+
+.navLinks a {
+  display: inline-block;
+  margin: 1em;
+  color: white;
+}
+
+.authForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginForm,
+.signupForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 30rem;
+}
+
+.loginForm label,
+.signupForm label {
+  width: 100%;
+  color: white;
+  float: left;
+  padding-top: 1rem;
+}
+
+.loginForm input[type='text'],
+input[type='password'],
+.signupForm input[type='text'],
+input[type='password'] {
+  background: transparent;
+  border: none;
+  border-bottom: solid 1px;
+  border-color: #d8d8d8;
+  color: white;
+  width: 100%;
+  outline: none;
+  font-size: 1rem;
+}
+
+.loginForm button {
+  appearance: none;
+  outline: 0;
+  border: 0;
+  font-size: 16px;
+  width: 30rem;
+  border-radius: 4px;
+  padding: 10px 16px;
+  margin-top: 1.5rem 0 0 0;
+  background-color: #1e5ad7;
+  color: white;
+  cursor: pointer;
+}
+
+.signupForm button {
+  appearance: none;
+  outline: 0;
+  border: 0;
+  font-size: 16px;
+  width: 30rem;
+  border-radius: 4px;
+  padding: 10px 16px;
+  margin-top: 2rem;
+  background-color: #1e5ad7;
+  color: white;
+  cursor: pointer;
+}
+
+.googleLogin {
+  display: block;
+  font-size: 16px;
+  width: 28rem;
+  border-radius: 4px;
+  padding: 10px 16px;
+  margin-top: 1.5rem 0 0 0;
+  background-color: #1e5ad7;
+  color: white;
+  text-align: center;
+}
+
+.signupContainer,
+.loginContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.signup,
+.login {
+  font-size: 16px;
+  color: #1e5ad7;
+  border-bottom: solid 1px #1e5ad7;
+  text-align: center;
+  margin-left: 10px;
+}
+
+.userHome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.cash {
+  font-size: 2rem;
+}
+
+.tickerForm input {
+  display: block;
+  appearance: none;
+  outline: 0;
+  border: 1px solid #919191;
+  background-color: white;
+  width: 28rem;
+  border-radius: 4px;
+  padding: 10px 16px;
+  font-size: 16px;
+}
+
+.tickerForm button {
+  appearance: none;
+  outline: 0;
+  border: 0;
+  font-size: 16px;
+  width: 30rem;
+  border-radius: 4px;
+  padding: 10px 16px;
+  margin-top: 2rem;
+  background-color: #1e5ad7;
+  color: white;
+  cursor: pointer;
+}
+
+.portfolio,
+.transactions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.portfolio li,
+.transactions li {
+  list-style-type: none;
+  border-bottom: solid 1px white;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  bottom: 5px;
 }
 
 a {
@@ -8,11 +181,6 @@ a {
 
 label {
   display: block;
-}
-
-nav a {
-  display: inline-block;
-  margin: 1em;
 }
 
 form div {
