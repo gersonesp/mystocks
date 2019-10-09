@@ -27,27 +27,38 @@ router.get('/:id/:ticker/:quantity', (req, res, next) => {
 
     const data = JSON.parse(body)
 
+    const price =
+      data['Time Series (5min)'][Object.keys(data['Time Series (5min)'])[0]][
+        '4. close'
+      ]
+
     // Make a api call to confirm ticker is valid, if not valid send error message
     if (Object.keys(data)[0] === 'Error Message') {
       res.json({
         error: 'Oops something went wrong. Did you enter a valid ticker name?'
       })
 
-      //if the ticker is valid find or create the data in stock model
+      //if the ticker is valid find or create the data in Stock model
     } else {
-      Stock.findOrCreate({
-        where: {
-          ticker,
-          userId: id
-        },
-        defaults: {ticker, quantity: 0}
+      User.findByPk(id).then(user => {
+        if (user.balance - price * quantity > 0) {
+          Stock.findOrCreate({
+            where: {
+              ticker,
+              userId: id
+            },
+            defaults: {ticker, quantity: 0}
+          })
+            .then(([stock, created]) => {
+              return stock.increment('quantity', {by: quantity})
+            })
+            .then(stock => {
+              res.json(stock)
+            })
+        } else {
+          res.json({error: 'Oops not enough cash!'})
+        }
       })
-        .then(([stock, created]) => {
-          return stock.increment('quantity', {by: quantity})
-        })
-        .then(stock => {
-          res.json(stock)
-        })
     }
   })
 })
@@ -85,14 +96,22 @@ router.get('/:id/:ticker/:quantity/addTransaction', (req, res, next) => {
         data['Time Series (5min)'][Object.keys(data['Time Series (5min)'])[0]][
           '4. close'
         ]
+      User.findByPk(id).then(user => {
+        if (user.balance - price * quantity > 0) {
+          // add data to Transaction model
+          Transaction.create({
+            userId: id,
+            ticker,
+            quantity,
+            price: price
+          }).then(stock => {
+            res.json(stock)
+          })
 
-      Transaction.create({
-        userId: id,
-        ticker,
-        quantity,
-        price: price
-      }).then(stock => {
-        res.json(stock)
+          user.decrement('balance', {by: price * quantity})
+        } else {
+          res.json({error: 'Oops not enough cash!'})
+        }
       })
 
       res.json(price)

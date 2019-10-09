@@ -2,10 +2,10 @@ import React from 'react'
 import {reduxForm, Field} from 'redux-form'
 
 const TickerForm = ({handleChange, handleSubmit, value}) => (
-  <form onSubmit={handleSubmit}>
+  <form onSubmit={handleSubmit} className="tickerForm">
     <div>
       <label htmlFor="ticker">
-        <small>Enter ticker symbol</small>
+        <p>Enter ticker symbol</p>
       </label>
       <Field
         component="input"
@@ -13,10 +13,11 @@ const TickerForm = ({handleChange, handleSubmit, value}) => (
         type="text"
         value={value}
         onChange={handleChange}
+        style={{textTransform: 'uppercase'}}
       />
 
       <label htmlFor="quantity">
-        <small>Qty:</small>
+        <p>Quantity</p>
       </label>
       <Field
         component="input"
@@ -25,6 +26,7 @@ const TickerForm = ({handleChange, handleSubmit, value}) => (
         min="1"
         value={value}
         onChange={handleChange}
+        style={{textTransform: 'uppercase'}}
       />
 
       <button type="submit">Buy</button>

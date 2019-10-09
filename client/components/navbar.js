@@ -1,19 +1,46 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link, NavLink} from 'react-router-dom'
 import {logout} from '../store'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
-  <div>
-    <h1>My Stocks</h1>
+  <div className="navbar">
+    <h1 className="navbarHeader">Portfolio Manager</h1>
     <nav>
       {isLoggedIn ? (
-        <div>
+        <div className="navLinks">
           {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <Link to="/portfolio">Portfolio</Link>
-          <Link to="/transactions">Transactions</Link>
+          <NavLink
+            exact
+            to="/home"
+            activeStyle={{
+              color: '#1e5ad7',
+              borderBottom: 'solid 1px #1e5ad7'
+            }}
+          >
+            Purchase
+          </NavLink>
+          <NavLink
+            exact
+            to="/portfolio"
+            activeStyle={{
+              color: '#1e5ad7',
+              borderBottom: 'solid 1px #1e5ad7'
+            }}
+          >
+            Portfolio
+          </NavLink>
+          <NavLink
+            exact
+            to="/transactions"
+            activeStyle={{
+              color: '#1e5ad7',
+              borderBottom: 'solid 1px #1e5ad7'
+            }}
+          >
+            Transactions
+          </NavLink>
           <a href="#" onClick={handleClick}>
             Logout
           </a>
@@ -21,12 +48,11 @@ const Navbar = ({handleClick, isLoggedIn}) => (
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
+          {/* <Link to="/login">Login</Link> */}
+          {/* <Link to="/signup">Sign Up</Link> */}
         </div>
       )}
     </nav>
-    <hr />
   </div>
 )
 

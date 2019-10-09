@@ -34,7 +34,7 @@ export const stock = (ticker, quantity, id) => dispatch => {
       if (data.error) {
         dispatch(gotError(data.error))
       } else {
-        dispatch(gotSuccess('Stocks add to your Portfolio!'))
+        dispatch(gotSuccess('Stocks added to your Portfolio!'))
       }
     })
     .catch(error => console.log(error))
@@ -46,7 +46,7 @@ export const stock = (ticker, quantity, id) => dispatch => {
       if (data.error) {
         dispatch(gotError(data.error))
       } else {
-        dispatch(gotSuccess('Stocks add to your Portfolio!'))
+        dispatch(gotSuccess('Stocks added to your Portfolio!'))
       }
     })
     .catch(error => console.log(error))
@@ -69,7 +69,7 @@ export default function(state = defaultStocks, action) {
         open:
           action.stocks['Time Series (5min)'][
             Object.keys(action.stocks['Time Series (5min)'])[0]
-          ]['4. close'],
+          ]['1. open'],
         close:
           action.stocks['Time Series (5min)'][
             Object.keys(action.stocks['Time Series (5min)'])[0]

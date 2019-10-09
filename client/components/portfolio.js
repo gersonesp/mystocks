@@ -13,19 +13,15 @@ export const Portfolio = props => {
   }, [])
 
   return (
-    <div>
-      {typeof portfolioData !== 'undefined' &&
-        portfolioData && (
-          <div>
-            <h3>Your Portfolio</h3>
-
-            {portfolioData.map(item => (
-              <li key={item.id}>
-                {item.ticker} - {item.quantity} shares
-              </li>
-            ))}
-          </div>
-        )}
+    <div className="portfolio">
+      <h3>Your Portfolio</h3>
+      <ul>
+        {portfolioData.map(item => (
+          <li key={item.id}>
+            {item.ticker.toUpperCase()} - {item.quantity} shares
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

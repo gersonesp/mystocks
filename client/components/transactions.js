@@ -13,13 +13,13 @@ export const Transactions = props => {
   }, [])
 
   return (
-    <div>
+    <div className="transactions">
       <h3>History of Transactions</h3>
       <ul>
         {transactions.map(item => (
           <li key={item.id}>
-            {item.date.split('T').shift()} BUY ({item.ticker}) - {item.quantity}{' '}
-            Shares @ {item.price}
+            {item.date.split('T').shift()} BUY ({item.ticker.toUpperCase()}) -{' '}
+            {item.quantity} Shares @ {item.price}
           </li>
         ))}
       </ul>
