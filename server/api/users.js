@@ -14,22 +14,42 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-// route for storing users owned stocks
+// route for storing user's stocks
 router.get('/:id/:ticker/:quantity', (req, res, next) => {
   let {id, ticker, quantity} = req.params
-  Stock.findOrCreate({
-    where: {
-      ticker,
-      userId: id
-    },
-    defaults: {ticker, quantity: 0}
+
+  const URL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=5min&apikey=S8W944C1GY7T8XYU`
+
+  request({url: URL}, (error, response, body) => {
+    if (error || response.statusCode !== 200) {
+      return res.status(500).json({type: 'error', message: error.message})
+    }
+
+    const data = JSON.parse(body)
+
+    // Make a api call to confirm ticker is valid, if not valid send error message
+    if (Object.keys(data)[0] === 'Error Message') {
+      res.json({
+        error: 'Oops something went wrong. Did you enter a valid ticker name?'
+      })
+
+      //if the ticker is valid find or create the data in stock model
+    } else {
+      Stock.findOrCreate({
+        where: {
+          ticker,
+          userId: id
+        },
+        defaults: {ticker, quantity: 0}
+      })
+        .then(([stock, created]) => {
+          return stock.increment('quantity', {by: quantity})
+        })
+        .then(stock => {
+          res.json(stock)
+        })
+    }
   })
-    .then(([stock, created]) => {
-      return stock.increment('quantity', {by: quantity})
-    })
-    .then(stock => {
-      res.json(stock)
-    })
 })
 
 // route for getting users personal portfolio
@@ -47,7 +67,7 @@ router.get('/:id/portfolio', (req, res, next) => {
 // route for creating user transaction history
 router.get('/:id/:ticker/:quantity/addTransaction', (req, res, next) => {
   let {id, ticker, quantity} = req.params
-  const URL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=5min&apikey=F6A5SHKGFHR00T5Q`
+  const URL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=5min&apikey=S8W944C1GY7T8XYU`
 
   request({url: URL}, (error, response, body) => {
     if (error || response.statusCode !== 200) {
@@ -56,21 +76,27 @@ router.get('/:id/:ticker/:quantity/addTransaction', (req, res, next) => {
 
     const data = JSON.parse(body)
 
-    const price =
-      data['Time Series (5min)'][Object.keys(data['Time Series (5min)'])[0]][
-        '4. close'
-      ]
+    if (Object.keys(data)[0] === 'Error Message') {
+      res.json({
+        error: 'Oops something went wrong. Did you enter a valid ticker name?'
+      })
+    } else {
+      const price =
+        data['Time Series (5min)'][Object.keys(data['Time Series (5min)'])[0]][
+          '4. close'
+        ]
 
-    Transaction.create({
-      userId: id,
-      ticker,
-      quantity,
-      price: price
-    }).then(stock => {
-      res.json(stock)
-    })
+      Transaction.create({
+        userId: id,
+        ticker,
+        quantity,
+        price: price
+      }).then(stock => {
+        res.json(stock)
+      })
 
-    res.json(price)
+      res.json(price)
+    }
   })
 })
 

@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {useSelector, useDispatch} from 'react-redux'
-import {stock, currentPrice, portfolio as dispatchPortfolio} from '../store'
+import {stock, portfolio as dispatchPortfolio} from '../store'
 import TickerForm from './ticker-form'
 
 /**
@@ -10,7 +10,6 @@ import TickerForm from './ticker-form'
 export const UserHome = props => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
-  const portfolio = useSelector(state => state.portfolio)
   const stocks = useSelector(state => state.stocks)
 
   const handleSearchSubmit = (value, id) => {
@@ -19,7 +18,7 @@ export const UserHome = props => {
 
   useEffect(() => {
     dispatch(dispatchPortfolio(user.id))
-    //TODO had portfolio in array below (second argument for useEffect) to active rerender on change
+    //TODO add portfolio in array below (second argument for useEffect) to active rerender on change
   }, [])
 
   return (
@@ -36,15 +35,10 @@ export const UserHome = props => {
         }}
       />
 
-      <h3>Portfolio</h3>
-
-      {typeof portfolio !== 'undefined' &&
-        portfolio &&
-        portfolio.map(item => (
-          <li key={item.id}>
-            {item.ticker} - {item.quantity} shares @ {}
-          </li>
-        ))}
+      {stocks.error !== 'undefined' &&
+        stocks.error && <div>{stocks.error}</div>}
+      {stocks.success !== 'undefined' &&
+        stocks.success && <div>{stocks.success}</div>}
 
       {user.error &&
         user.error.response && <div> {user.error.response.data} </div>}
