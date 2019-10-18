@@ -1,1 +1,3 @@
-# My Stocks Web Application
+# Portfolio Manager Web Application
+
+## To run local: npm run start-dev
